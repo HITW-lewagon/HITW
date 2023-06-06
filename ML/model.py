@@ -8,8 +8,8 @@ import os
 def load_model():
     load_dotenv()
     storage_client = storage.Client()
-    bucket_name = os.environ.get("BUCKET_NAME")
-    model_bucket = os.environ.get("MODEL_BUCKET")
+    bucket_name = 'hitw'
+    model_bucket = 'xgbmodel.pkl'
 
     model_local = 'local_model.pkl'
     bucket = storage_client.get_bucket(bucket_name)
@@ -19,5 +19,12 @@ def load_model():
     model_file = BytesIO()
     blob.download_to_filename(model_local)
     #load into joblib
+    model = joblib.load(model_local)
+    return model
+
+
+def load_model_local():
+    load_dotenv()
+    model_local = '/Users/giovannicabral/hitw/xgbmodel.pkl'
     model = joblib.load(model_local)
     return model

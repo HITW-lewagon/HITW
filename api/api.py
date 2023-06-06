@@ -1,7 +1,8 @@
 import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from ML.model import load_model
+# from ML.model import load_model
+from hitw.ML.model import load_model_local
 
 app = FastAPI()
 
@@ -17,7 +18,7 @@ app = FastAPI()
 
 @app.get("/predict")
 def predict(hdi: float, le: float, eys: float, mys: float, gnipc: float,
-            gdi: float, gii: float, rpg: float):
+            gdi: float, gii: float, rpg: float, sub_region: str):
     """
     Make a single course prediction.
     Assumes `pickup_datetime` is provided as a string by the user in "%Y-%m-%d %H:%M:%S" format
@@ -31,11 +32,12 @@ def predict(hdi: float, le: float, eys: float, mys: float, gnipc: float,
                       gnipc=gnipc,
                       gdi=gdi,
                       gii=gii,
-                      rpg=rpg)
+                      rpg=rpg,
+                      sub_region=sub_region)
     X_pred = pd.DataFrame(dictionary, index=[0])
 
-    model = load_model()
-    predict = model.predict(X_pred)
+    model = load_model_local()
+    predict = model.predict(X_pred).tolist()
     return predict
 
 
